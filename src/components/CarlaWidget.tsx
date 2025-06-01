@@ -2,7 +2,7 @@ import Image from "next/image";
 import VoiceComponent from "@/components/VoiceComponent";
 import {useVoiceChat} from '@/context/VoiceChatContexts';
 import { motion, AnimatePresence } from "framer-motion";
-import { div } from "framer-motion/client";
+
 
 export default function CarlaWidget({ isSpeaking }: { isSpeaking: boolean }) {
   console.log("Rendering CarlaWidget with isSpeaking:", isSpeaking);
@@ -12,7 +12,7 @@ export default function CarlaWidget({ isSpeaking }: { isSpeaking: boolean }) {
 
 
   return (
-    <div className="relative flex flex-col items-center justify-center text-center w-[300px]  mx-auto">
+    <div className="relative flex flex-col py-4 items-center justify-center text-center w-[300px]  mx-auto">
       {/* Aura animada */}
       <div className="relative w-48 h-48 flex items-center justify-center">
         {isSpeaking && (

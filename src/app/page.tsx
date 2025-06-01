@@ -76,9 +76,9 @@ export default function Home() {
           className="flex min-h-screen flex-col items-center justify-center relative overflow-hidden"
         >
           {/* <div className="absolute -z-10 w-[500px] h-full rounded-full bg-gradient-to-r from-purple-500/30 to-blue-500/30 blur-[100px] animate-pulse" /> */}
-          <div className="h-full mt-4   flex flex-col items-center justify-center  md:w-3/4 w-full">
+          <div className="h-screen   flex flex-col items-center justify-center  md:w-3/4 w-full">
           <CarlaWidget isSpeaking={isAgentSpeaking} />
-          <div className="text-center mt-4 text-lg font-semibold text-gray-800 flex-1 md:w-3/4 w-full p-6 md:p-0">
+          <div className="text-lg font-semibold text-gray-800 flex-1 md:w-3/4 w-full p-6 md:p-0">
             <ChatMessages />
           </div>
           </div>
