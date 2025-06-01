@@ -120,9 +120,9 @@ const VoiceChat = () => {
   }, [hasPermission, setHasPermissionContext]);
 
   return (
-    <div className="flex flex-col items-center justify-center text-center rounded-lg shadow-lg p-4 font-bold mt-4 mx-auto">
+    <div className="flex flex-col items-center justify-center text-center rounded-lg shadow-lg p-4 font-bold mx-auto">
        <p>Carla Agente IA </p>
-      <span className="text-xs text-gray-400">Inmobiliaria M&M</span>
+      <span className="text-xs text-gray-400">Inmobiliaria M & M</span>
     </div>
   
   );
