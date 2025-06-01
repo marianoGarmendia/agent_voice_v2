@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import {  useVoiceChat } from "@/context/VoiceChatContexts";
+
 
 // ElevenLabs
 import { useConversation } from "@11labs/react";
@@ -9,11 +11,15 @@ import { useConversation } from "@11labs/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mic, MicOff, Volume2, VolumeX } from "lucide-react";
+import { div } from "framer-motion/client";
 
 const VoiceChat = () => {
   const [hasPermission, setHasPermission] = useState(false);
+  
   const [isMuted, setIsMuted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const {  setIsAgentSpeaking, setHasPermissionContext , setMessagesConversation} = useVoiceChat();
+
 
   const conversation = useConversation({
     onConnect: () => {
@@ -24,6 +30,15 @@ const VoiceChat = () => {
     },
     onMessage: (message) => {
       console.log("Received message:", message);
+      setMessagesConversation((prev) => [
+        ...prev,
+        {
+          
+          text: message.message,
+          source: message.source,
+          timestamp: Date.now(),
+        },
+      ]);
     },
     onError: (error: string | Error) => {
       setErrorMessage(typeof error === "string" ? error : error.message);
@@ -48,18 +63,34 @@ const VoiceChat = () => {
     requestMicPermission();
   }, []);
 
-  const handleStartConversation = async () => {
-    try {
-      // Replace with your actual agent ID or URL
-      const conversationId = await conversation.startSession({
-        agentId: process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID!,
-      });
-      console.log("Started conversation:", conversationId);
-    } catch (error) {
-      setErrorMessage("Failed to start conversation");
-      console.error("Error starting conversation:", error);
-    }
-  };
+  // const handleStartConversation = async () => {
+  //   try {
+  //     // Replace with your actual agent ID or URL
+  //     const conversationId = await conversation.startSession({
+  //       agentId: process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID!,
+  //     });
+  //     console.log("Started conversation:", conversationId);
+  //   } catch (error) {
+  //     setErrorMessage("Failed to start conversation");
+  //     console.error("Error starting conversation:", error);
+  //   }
+  // };
+
+  useEffect(() => {
+  if (hasPermission && status === "disconnected") {
+    (async () => {
+      try {
+        const conversationId = await conversation.startSession({
+          agentId: process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID!,
+        });
+        console.log("Started conversation:", conversationId);
+      } catch (error) {
+        setErrorMessage("Failed to auto-start conversation");
+        console.error("Error auto-starting conversation:", error);
+      }
+    })();
+  }
+}, [hasPermission, status]);
 
   const handleEndConversation = async () => {
     try {
@@ -80,67 +111,20 @@ const VoiceChat = () => {
     }
   };
 
-  return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          Voice Chat
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={toggleMute}
-              disabled={status !== "connected"}
-            >
-              {isMuted ? (
-                <VolumeX className="h-4 w-4" />
-              ) : (
-                <Volume2 className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="flex justify-center">
-            {status === "connected" ? (
-              <Button
-                variant="destructive"
-                onClick={handleEndConversation}
-                className="w-full"
-              >
-                <MicOff className="mr-2 h-4 w-4" />
-                End Conversation
-              </Button>
-            ) : (
-              <Button
-                onClick={handleStartConversation}
-                disabled={!hasPermission}
-                className="w-full"
-              >
-                <Mic className="mr-2 h-4 w-4" />
-                Start Conversation
-              </Button>
-            )}
-          </div>
+  useEffect(() => {
+    setIsAgentSpeaking(isSpeaking);
+  },[ isSpeaking]);
 
-          <div className="text-center text-sm">
-            {status === "connected" && (
-              <p className="text-green-600">
-                {isSpeaking ? "Agent is speaking..." : "Listening..."}
-              </p>
-            )}
-            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-            {!hasPermission && (
-              <p className="text-yellow-600">
-                Please allow microphone access to use voice chat
-              </p>
-            )}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+  useEffect(() => {
+    setHasPermissionContext(hasPermission);
+  }, [hasPermission, setHasPermissionContext]);
+
+  return (
+    <div className="flex flex-col items-center justify-center text-center rounded-lg shadow-lg p-4 font-bold mt-4 mx-auto">
+       <p>Carla Agente IA </p>
+      <span className="text-xs text-gray-400">Inmobiliaria M&M</span>
+    </div>
+  
   );
 };
 

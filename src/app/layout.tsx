@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { VoiceChatProvider } from "@/context/VoiceChatContexts";
+
 import "./globals.css";
 
 const geistSans = localFont({
@@ -14,8 +16,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "ElevenLabs Conversational AI Demo",
-  description: "A demo of ElevenLabs Conversational AI",
+  title: "Agente AI conversacional de inmobiliaria Maria ",
+  description: "Un agente AI conversacional para inmobiliaria Maria M&M",
 };
 
 export default function RootLayout({
@@ -28,7 +30,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <VoiceChatProvider>
+          
         {children}
+        </VoiceChatProvider>
       </body>
     </html>
   );
