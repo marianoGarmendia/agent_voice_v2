@@ -21,7 +21,7 @@ export default function Home() {
   }, []);
 
    return (
-    <main className="flex h-dvh flex-col">
+    <main className="flex flex-col h-screen ">
     <AnimatePresence mode="wait">
       {showIntro ? (
         <motion.div
