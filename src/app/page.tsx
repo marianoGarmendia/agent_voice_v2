@@ -1,21 +1,39 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import Image from "next/image";
 import { LoaderCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CarlaWidget from "@/components/CarlaWidget";
 import { useVoiceChat } from "@/context/VoiceChatContexts";
 import ChatMessages from "@/components/ChatContainer";
-import { div } from "framer-motion/client";
+import {useWebSocket} from "@/custom/useWebSocket";
+import {usePersistentThreadId} from "@/custom/usePersistantThreadId";
+
 
 export default function Home() {
-  const { isAgentSpeaking } = useVoiceChat();
+  const { isAgentSpeaking , setPropsUi} = useVoiceChat();
   const [showIntro, setShowIntro] = useState(true);
+  const {threadId , runId, runIdConfig} = usePersistentThreadId();
+  const { props} = useWebSocket({url:"ws://localhost:5000", thread_id: threadId ,runId    ,runIdConfig  });
+
+  
+  useEffect(() => {
+    console.log("Props desde WebSocket:", props);
+    if (props.length > 0) {
+      setPropsUi(props);
+    }
+  }, [props, setPropsUi]);
+
+  
+
+
+  
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowIntro(false);
-    }, 10000); // 10 segundos
+    }, 1000); // 10 segundos
 
     return () => clearTimeout(timeout);
   }, []);
@@ -48,9 +66,9 @@ export default function Home() {
 
             <div className="mx-4 mb-6 rounded-lg bg-[#fef7ef] p-6 text-center">
               <p className="text-md mb-2 font-bold">
-                Especialista de Real State
+                Especialista Rent a Car
               </p>
-              <p>para inmobiliaria MYM</p>
+              {/* <p>para inmobiliaria MYM</p> */}
             </div>
 
             <p className="text-center">

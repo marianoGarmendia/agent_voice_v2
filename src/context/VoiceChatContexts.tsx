@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useRef ,createContext, useContext, useState } from "react";
+import {Auto} from "@/custom/useWebSocket"; // Ajusta la ruta según tu estructura de carpetas
 
 export type Message = {
   id?: string;
@@ -25,7 +26,9 @@ type VoiceChatContextType = {
     recording: boolean;
     transcription: string | null;
     setMessagesConversation:React.Dispatch<React.SetStateAction<Message[]>>;
-    messagesConversation: Message[];
+    messagesConversation: Message[]
+    propsUi: Auto[];
+  setPropsUi: React.Dispatch<React.SetStateAction<Auto[]>>;
 };
 
 
@@ -35,6 +38,7 @@ const VoiceChatContext = createContext<VoiceChatContextType | undefined>(undefin
 export const VoiceChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messagesVoicesUser, setMessagesVoicesUser] = useState<Message[]>([]);
   const [messagesVoicesAi, setMessagesVoicesAi] = useState<Message[]>([]);
+  const [propsUi , setPropsUi] = useState<Auto[]>([]); 
 
   const [statusConversation, setStatusConversation] = useState<string>("");
   const [isAgentSpeaking, setIsAgentSpeaking] = useState<boolean>(false);
@@ -63,7 +67,7 @@ export const VoiceChatProvider = ({ children }: { children: React.ReactNode }) =
   };
 
   return (
-    <VoiceChatContext.Provider value={{ messagesVoicesUser, addMessageUser, messagesVoicesAi, addMessageAi, stopRecording, recording, transcription , setMessagesConversation, messagesConversation, isAgentSpeaking, setIsAgentSpeaking, statusConversation, setStatusConversation, hasPermissionContext, setHasPermissionContext }}>
+    <VoiceChatContext.Provider value={{ messagesVoicesUser, addMessageUser, messagesVoicesAi, addMessageAi, stopRecording, recording, transcription , setMessagesConversation, messagesConversation, isAgentSpeaking, setIsAgentSpeaking, statusConversation, setStatusConversation, hasPermissionContext, setHasPermissionContext, setPropsUi, propsUi }}>
       {children}
     </VoiceChatContext.Provider>
   );

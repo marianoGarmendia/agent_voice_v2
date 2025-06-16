@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import {  useVoiceChat } from "@/context/VoiceChatContexts";
 
+import {usePersistentThreadId} from "@/custom/usePersistantThreadId";
 
 // ElevenLabs
 import { useConversation } from "@11labs/react";
@@ -12,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import { div } from "framer-motion/client";
+import { threadId } from "worker_threads";
 
 const VoiceChat = () => {
   const [hasPermission, setHasPermission] = useState(false);
@@ -19,6 +21,7 @@ const VoiceChat = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const {  setIsAgentSpeaking, setHasPermissionContext , setMessagesConversation} = useVoiceChat();
+  const { threadId, runId, runIdConfig } = usePersistentThreadId();
 
 
   const conversation = useConversation({
@@ -82,6 +85,11 @@ const VoiceChat = () => {
       try {
         const conversationId = await conversation.startSession({
           agentId: process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID!,
+         customLlmExtraBody:{
+         threadId,
+          runId,
+          runIdConfig,
+         }
         });
         console.log("Started conversation:", conversationId);
       } catch (error) {
@@ -122,7 +130,7 @@ const VoiceChat = () => {
   return (
     <div className="flex flex-col items-center justify-center text-center rounded-lg shadow-lg p-4 font-bold mx-auto">
        <p>Carla Agente IA </p>
-      <span className="text-xs text-gray-400">Inmobiliaria M & M</span>
+      {/* <span className="text-xs text-gray-400">Inmobiliaria M & M</span> */}
     </div>
   
   );
