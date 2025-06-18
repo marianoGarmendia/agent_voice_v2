@@ -15,12 +15,12 @@ export default function Home() {
   const { isAgentSpeaking , setPropsUi} = useVoiceChat();
   const [showIntro, setShowIntro] = useState(true);
   const {threadId , runId, runIdConfig} = usePersistentThreadId();
-  const { props} = useWebSocket({url:"ws://localhost:5000", thread_id: threadId ,runId    ,runIdConfig  });
+  const { props} = useWebSocket({url:"ws://uiconversationalrealstate-production.up.railway.app", thread_id: threadId ,runId    ,runIdConfig  });
 
   
   useEffect(() => {
     if (props.length > 0) {
-      console.log("Props desde WebSocket:", props);
+      // console.log("Props desde WebSocket:", props);
       setPropsUi(props);
     }
   }, [props, setPropsUi]);
@@ -33,7 +33,7 @@ export default function Home() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowIntro(false);
-    }, 1000); // 10 segundos
+    }, 10000); // 10 segundos
 
     return () => clearTimeout(timeout);
   }, []);
