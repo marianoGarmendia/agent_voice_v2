@@ -19,8 +19,8 @@ export default function Home() {
 
   
   useEffect(() => {
-    console.log("Props desde WebSocket:", props);
     if (props.length > 0) {
+      console.log("Props desde WebSocket:", props);
       setPropsUi(props);
     }
   }, [props, setPropsUi]);

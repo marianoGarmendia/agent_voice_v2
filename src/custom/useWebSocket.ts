@@ -40,12 +40,39 @@ export interface Auto {
   activo: boolean;
 }
 
+export interface PropCardItem  {
+  id: string;
+  image_url?: string;
+  direccion: string;
+  caracteristicas: string[];
+  moneda: string;
+  precio: string;
+  url?: string;
+};
+
 
 
 type ServerMessage = PropsMessage | PingMessage | UIMessage;
 
+
+export function transformarInmueblesParaCards(data: any[]): PropCardItem[] {
+  return data.map((item) => {
+    const props = item.PROPS;
+    return {
+      id: props.id,
+      image_url: item.R_IMG?.[0]?.LOCATION ?? undefined,
+      direccion: props.direccion || "Dirección no disponible",
+      caracteristicas: props.caracteristicas || [],
+      moneda: props.moneda || "",
+      precio: props.precio || "",
+      url: `/inmueble/${props.id}`, // podés ajustar esta URL según tu routing
+    };
+  });
+}
+
 export function useWebSocket({url, thread_id, runId, runIdConfig}:ParamsWebSocket) {
-  const [props, setProps] = useState<Auto[]>([]); 
+  const [props, setProps] = useState<PropCardItem[]>([]); 
+  const [propsToParsed , setPropsToParsed] = useState<any[]>([]); // Para almacenar los props para parsear
   const socketRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -87,10 +114,10 @@ export function useWebSocket({url, thread_id, runId, runIdConfig}:ParamsWebSocke
         
         if (msg.type === "props") {
           console.log("Props recibidos:", msg.data);
-          setProps(msg.data);
+          setPropsToParsed(msg.data);
         }else if(msg.type === "ui"){
             console.log("UI message received:", msg.data);
-            setProps(msg.data.cars);
+            setProps(msg.data);
             // Aquí puedes manejar el mensaje de UI según sea necesario
         } else if(msg.type === "ping") {
           // opcional: console.log("Ping del servidor");
@@ -112,6 +139,17 @@ export function useWebSocket({url, thread_id, runId, runIdConfig}:ParamsWebSocke
       socket.close();
     };
   }, [url , thread_id, runId, runIdConfig]);
+
+
+
+  // Si hay props parsearlas para que puedan ser bien rendereadas en el componente
+  useEffect(() => {
+    if(propsToParsed.length > 0) {
+      const transformedProps = transformarInmueblesParaCards(propsToParsed);
+      setProps(transformedProps);}
+
+  },[propsToParsed]);
+
 
   return { props };
 }

@@ -6,7 +6,8 @@ import { Message } from "@/context/VoiceChatContexts"; // ajustá según tu ruta
 import { useVoiceChat } from "@/context/VoiceChatContexts";
 import HumanMessage from "@/components/HumanMessage";
 import AIMessage from "@/components/AIMessage";
-import PropertiesCarousel from "@/components/ui/PropertyCarousel";
+// import PropertiesCarousel from "@/components/ui/PropertyCarousel";
+import PropertiesCarousel from "./ui/PropertyCarousel";
 
 export default function ChatMessages() {
   const { messagesConversation, propsUi } = useVoiceChat();
@@ -24,10 +25,10 @@ export default function ChatMessages() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="fixed top-0 left-0 w-full z-20 bg-white shadow-xl px-4 py-4"
+      className="fixed top-[40%] left-0 w-full z-20 bg-white shadow-xl px-4 py-4"
     >
       <div className="max-w-5xl mx-auto">
-        <PropertiesCarousel items={propsUi} />
+        <PropertiesCarousel items={propsUi as any} />
       </div>
     </motion.div>
   )}
@@ -37,7 +38,7 @@ export default function ChatMessages() {
   }`}>
     <div className="mx-auto flex max-w-3xl flex-col gap-4 w-full">
       <AnimatePresence initial={false}>
-        {messagesConversation.map((message, index) => {
+        {/* {messagesConversation.map((message, index) => {
           const key = message.id || `${message.source}-${index}`;
           const isUser = message.source === "user";
           const isAgent = message.source === "ai";
@@ -72,7 +73,7 @@ export default function ChatMessages() {
               ) : null}
             </motion.div>
           );
-        })}
+        })} */}
       </AnimatePresence>
       <div ref={endRef} />
     </div>

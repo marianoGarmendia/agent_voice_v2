@@ -1,23 +1,78 @@
 import React, { useState, useEffect, useRef } from "react";
-import AutoCard from "./AutoCard";
-import {Auto} from "@/custom/useWebSocket"; // Ajusta la ruta según tu estructura de carpetas
-import{useVoiceChat} from "@/context/VoiceChatContexts";
 
 
-interface AutoItem {
-  items: Auto[]
+
+
+  export interface Product {
+    agente: string;
+    alrededores: string;
+    banios: number;
+    caracteristicas: string[];
+    circunstancia: string;
+    ciudad: string;
+    cocina: string;
+    codigo_postal: number;
+    construccion_nueva: number;
+    consumo_energia: number;
+    direccion: string;
+    dormitorios: number;
+    emisiones: number;
+    estado: string;
+    estgen: string;
+    fecha_alta: string;
+    freq_precio: string;
+    'geolocalizacion.latitude': number;
+    'geolocalizacion.longitude': number;
+    id: string | number; // Cambiado a string | number
+    image_url: string;
+    m2constr: number;
+    m2terraza: number;
+    m2utiles: number;
+    moneda: string;
+    nascensor: number;
+    ntrasteros: number;
+    num_inmueble: number | string; // Cambiado a number | string
+    num_pisos_bloque: number | null; // Cambiado a number | null
+    num_pisos_edificio: number | null; // Cambiado a number | null
+    num_planta: string | null; // Cambiado a string | null
+    num_terrazas: number | null; // Cambiado a number | null
+    pais: string;
+    piscina: number | null; // Cambiado a number | null
+    precio: number | null; // Cambiado a number | null
+    'propietario.apellido': string | null; // Cambiado a string | null
+    'propietario.codigo': number | null; // Cambiado a number | null
+    'propietario.comercial': string | null; // Cambiado a string | null
+    'propietario.fecha_alta': string | null; // Cambiado a string | null
+    'propietario.nombre': string | null; // Cambiado a string | null
+    provincia: string;
+    puerta?: any; // Se puede cambiar el tipo según sea necesario
+    ref?: any; // Se puede cambiar el tipo según sea necesario
+    'superficie.built'?: any; // Se puede cambiar el tipo según sea necesario
+    'superficie.plot'?: any; // Se puede cambiar el tipo según sea necesario
+    tipo: string;
+    tipo_operacion: string;
+    tipo_via: string;
+    ubicacion: string;
+    ventana: string;
+    zona: string;
+    url: string;
+    [key: string]: any; // Permitir propiedades adicionales
+  }
+
+
+
+
+interface CarouselProps {
+  items: Product[];
 }
 
-const PropertiesCarousel = ({items} : AutoItem) => {
+const PropertiesCarousel: React.FC<CarouselProps> = ({ items }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(1);
-  const { propsUi } = useVoiceChat();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
   const touchDeltaX = useRef(0);
-
-  
 
   // Ajustar items por página según ancho
   useEffect(() => {
@@ -71,14 +126,55 @@ const PropertiesCarousel = ({items} : AutoItem) => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {items.length > 0 && items.map((property, index) => {
-         return <AutoCard key={index} auto={property} />
-        })}
+      {items.map((prop) => {
+  const props = prop.PROPS || {};
+  const caracteristicas = props.caracteristicas || [];
+  const imagenPrincipal = prop.R_IMG?.[0]?.LOCATION;
+
+  return (
+    <div
+      key={prop.ID_PRODUCTO}
+      className="flex-shrink-0 px-2"
+      style={{ width: `${100 / itemsPerPage}%` }}
+    >
+      <div className="overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-2xl">
+        <img
+          src={
+            imagenPrincipal ??
+            "https://blog.wasi.co/wp-content/uploads/2019/07/claves-fotografia-inmobiliaria-exterior-casa-software-inmobiliario-wasi.jpg"
+          }
+          alt={props.direccion ?? "Propiedad"}
+          className="h-48 w-full object-cover"
+        />
+        <div className="p-4">
+          <h2 className="font-bold text-lg">{props.ciudad}</h2>
+          <p className="mb-2 text-sm text-gray-600">
+            {props.descripcion}
+          </p>
+          <p className="text-lg font-bold text-green-600">
+            {props.moneda ?? "€"}
+            {props.precio}
+          </p>
+          <a
+            href={prop.url ?? "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-block text-sm text-blue-500"
+          >
+            Ver publicación
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+})}
+
       </div>
 
       {/* Flechas de navegación */}
       <button
         onClick={prevPage}
+        data-id="prev-button"
         disabled={currentPage === 0}
         className="absolute top-1/2 left-2 -translate-y-1/2 transform rounded-full bg-white p-2 shadow disabled:opacity-50"
         aria-label="Anterior"
@@ -87,6 +183,7 @@ const PropertiesCarousel = ({items} : AutoItem) => {
       </button>
       <button
         onClick={nextPage}
+        data-id="next-button"
         disabled={currentPage === pageCount - 1}
         className="absolute top-1/2 right-2 -translate-y-1/2 transform rounded-full bg-white p-2 shadow disabled:opacity-50"
         aria-label="Siguiente"

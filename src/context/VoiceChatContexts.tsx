@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useRef ,createContext, useContext, useState } from "react";
-import {Auto} from "@/custom/useWebSocket"; // Ajusta la ruta según tu estructura de carpetas
+import {PropCardItem} from "@/custom/useWebSocket"; // Ajusta la ruta según tu estructura de carpetas
 
 export type Message = {
   id?: string;
@@ -27,8 +27,8 @@ type VoiceChatContextType = {
     transcription: string | null;
     setMessagesConversation:React.Dispatch<React.SetStateAction<Message[]>>;
     messagesConversation: Message[]
-    propsUi: Auto[];
-  setPropsUi: React.Dispatch<React.SetStateAction<Auto[]>>;
+    propsUi: PropCardItem[];
+  setPropsUi: React.Dispatch<React.SetStateAction<PropCardItem[]>>;
 };
 
 
@@ -38,7 +38,7 @@ const VoiceChatContext = createContext<VoiceChatContextType | undefined>(undefin
 export const VoiceChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messagesVoicesUser, setMessagesVoicesUser] = useState<Message[]>([]);
   const [messagesVoicesAi, setMessagesVoicesAi] = useState<Message[]>([]);
-  const [propsUi , setPropsUi] = useState<Auto[]>([]); 
+  const [propsUi , setPropsUi] = useState<PropCardItem[]>([]); 
 
   const [statusConversation, setStatusConversation] = useState<string>("");
   const [isAgentSpeaking, setIsAgentSpeaking] = useState<boolean>(false);

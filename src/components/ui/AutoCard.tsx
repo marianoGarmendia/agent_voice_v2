@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-interface Auto {
+export interface Auto {
   id: number;
   marca: string;
   modelo: string;
@@ -17,7 +17,7 @@ interface Auto {
   activo: boolean;
 }
 
-interface AutoCardProps {
+export interface AutoCardProps {
   auto: Auto;
 }
 
