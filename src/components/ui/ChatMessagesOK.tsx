@@ -31,7 +31,7 @@ export default function ChatMessages() {
                 className="fixed top-0 left-0 w-full z-20 bg-white shadow-xl px-4 py-4"
               >
                 <div className="max-w-5xl mx-auto">
-                  <PropertiesCarousel items={propsUi} />
+                  <PropertiesCarousel items={propsUi as any} />
                 </div>
               </motion.div>
             )}

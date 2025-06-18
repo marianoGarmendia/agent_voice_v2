@@ -117,7 +117,7 @@ export function useWebSocket({url, thread_id, runId, runIdConfig}:ParamsWebSocke
           setPropsToParsed(msg.data);
         }else if(msg.type === "ui"){
             console.log("UI message received:", msg.data);
-            setProps(msg.data);
+            setProps(msg.data.props);
             // Aquí puedes manejar el mensaje de UI según sea necesario
         } else if(msg.type === "ping") {
           // opcional: console.log("Ping del servidor");

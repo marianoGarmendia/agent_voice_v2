@@ -149,7 +149,7 @@ const PropertiesCarousel: React.FC<CarouselProps> = ({ items }) => {
         <div className="p-4">
           <h2 className="font-bold text-lg">{props.ciudad}</h2>
           <p className="mb-2 text-sm text-gray-600">
-            {props.descripcion}
+            {prop.NOMBRE}
           </p>
           <p className="text-lg font-bold text-green-600">
             {props.moneda ?? "€"}
