@@ -15,7 +15,7 @@ export default function Home() {
   const { isAgentSpeaking , setPropsUi} = useVoiceChat();
   const [showIntro, setShowIntro] = useState(true);
   const {threadId , runId, runIdConfig} = usePersistentThreadId();
-  const { props} = useWebSocket({url:"ws://uiconversationalrealstate-production.up.railway.app", thread_id: threadId ,runId    ,runIdConfig  });
+  const { props} = useWebSocket({url:"wss://uiconversationalrealstate-production.up.railway.app", thread_id: threadId ,runId    ,runIdConfig  });
 
   
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function Home() {
 
             <div className="mx-4 mb-6 rounded-lg bg-[#fef7ef] p-6 text-center">
               <p className="text-md mb-2 font-bold">
-                Especialista Rent a Car
+                Especialista Real State
               </p>
               {/* <p>para inmobiliaria MYM</p> */}
             </div>
