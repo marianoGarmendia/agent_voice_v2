@@ -1,14 +1,10 @@
- 
- 
- import { s } from "framer-motion/client";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid"; 
- 
-const THREAD_STORAGE_KEY = "thread_id";
-const RUN_ID_CONFIG_STORAGE_KEY = "run_id_config";
-const RUN_ID_STORAGE_KEY = "run_id";
+import { v4 as uuidv4 } from "uuid";
 
-// Crear el thread_id
+const THREAD_STORAGE_KEY = "threadId";
+const RUN_ID_CONFIG_STORAGE_KEY = "runIdConfig";
+const RUN_ID_STORAGE_KEY = "runId";
+
 export const usePersistentThreadId = () => {
   const [threadId, setThreadId] = useState<string | null>(null);
   const [runIdConfig, setRunIdConfig] = useState<string | null>(null);
@@ -20,25 +16,37 @@ export const usePersistentThreadId = () => {
     let existingRunId = localStorage.getItem(RUN_ID_STORAGE_KEY);
 
     if (!existingId) {
-      existingId = uuidv4(); // generar nuevo si no existe
+      existingId = uuidv4();
       localStorage.setItem(THREAD_STORAGE_KEY, existingId);
     }
 
     if (!existingRunIdConfig) {
-      existingRunIdConfig = uuidv4(); // generar nuevo si no existe
+      existingRunIdConfig = uuidv4();
       localStorage.setItem(RUN_ID_CONFIG_STORAGE_KEY, existingRunIdConfig);
     }
 
     if (!existingRunId) {
-      existingRunId = uuidv4(); // generar nuevo si no existe
+      existingRunId = uuidv4();
       localStorage.setItem(RUN_ID_STORAGE_KEY, existingRunId);
-
     }
+
     setThreadId(existingId);
     setRunIdConfig(existingRunIdConfig);
     setRunId(existingRunId);
+
+    const handleUnload = () => {
+      localStorage.removeItem(THREAD_STORAGE_KEY);
+      localStorage.removeItem(RUN_ID_CONFIG_STORAGE_KEY);
+      localStorage.removeItem(RUN_ID_STORAGE_KEY);
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+
+    return () => {
+      handleUnload(); // Limpieza al desmontar componente (SPA)
+      window.removeEventListener("beforeunload", handleUnload);
+    };
   }, []);
 
-  return {threadId, runId, runIdConfig, };
+  return { threadId, runId, runIdConfig };
 };
-   
