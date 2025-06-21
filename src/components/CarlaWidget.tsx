@@ -12,7 +12,7 @@ export default function CarlaWidget({ isSpeaking }: { isSpeaking: boolean }) {
 
 
   return (
-    <div className="relative flex flex-col py-4 items-center justify-center text-center w-[300px]  mx-auto top-7">
+    <div className="fixed top-[10%] flex flex-col py-4 items-center justify-center text-center w-[300px]  mx-auto ">
       {/* Aura animada */}
       <div className="relative w-48 h-48 flex items-center gap-2 justify-center">
         {isSpeaking && (
